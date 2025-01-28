@@ -1,6 +1,6 @@
-package br.com.ifba.webapi.repository;
+package br.com.ifba.webapi.user.repository;
 
-import br.com.ifba.webapi.entity.User;
+import br.com.ifba.webapi.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,4 +10,3 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends JpaRepository<User, Long> {
     // JpaRepository já inclui métodos padrão, como save, findAll, findById, delete, entre outros
 }
-
