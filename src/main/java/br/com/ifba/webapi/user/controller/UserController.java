@@ -1,6 +1,9 @@
 package br.com.ifba.webapi.user.controller;
 
 
+import br.com.ifba.webapi.infrastrutucture.mapper.ObjectMapperUtil;
+import br.com.ifba.webapi.user.dto.UserGetResponseDto;
+import br.com.ifba.webapi.user.dto.UserPostRequestDto;
 import br.com.ifba.webapi.user.entity.User;
 import br.com.ifba.webapi.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -19,13 +22,17 @@ public class UserController {
     // Injeta a dependência de UserService automaticamente pelo construtor
     private final UserService userService;
 
+    private final ObjectMapperUtil objectMapperUtil;
+
     // Define o endpoint POST em "/users/save" para salvar um usuário
     // Especifica que a requisição deve consumir JSON
-    @PostMapping(path = "/save", consumes = "application/json")
-    public ResponseEntity<?> save(@RequestBody User user) {
+    @PostMapping(path = "/save", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> save(@RequestBody UserPostRequestDto userPostRequestDto) {
         // Retorna a resposta com o status HTTP 201 (Created) e o objeto salvo
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(userService.save(user));
+                .body(objectMapperUtil.map(userService.save(
+                        (objectMapperUtil.map(userPostRequestDto, User.class))),
+                        UserGetResponseDto.class));
     }
 
     // Define o endpoint GET em "/users/findall" para buscar todos os usuários
@@ -34,7 +41,9 @@ public class UserController {
     public ResponseEntity<?> findAll() {
         // Retorna a resposta com o status HTTP 200 (OK) e a lista de usuários
         return ResponseEntity.status(HttpStatus.OK)
-                .body(userService.findAll());
+                .body(objectMapperUtil.mapAll(
+                        this.userService.findAll(),
+                        UserGetResponseDto.class));
     }
 
     // Mapeia a rota DELETE para excluir um recurso com base no ID fornecido
@@ -56,4 +65,19 @@ public class UserController {
         // Retorna uma resposta com o status HTTP 204 (No Content), indicando que a atualização foi realizada com sucesso
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @GetMapping(path = "findById/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+// Mapeia requisições HTTP GET para o endpoint "/users/findById/{id}" e define a resposta no formato JSON.
+    public ResponseEntity<?> findById(@PathVariable("id") Long id) {
+        // Método para buscar um usuário pelo ID fornecido na URL.
+        return ResponseEntity.status(HttpStatus.OK)
+                // Retorna uma resposta com o status HTTP 200 (OK).
+                .body(objectMapperUtil.map(
+                        // Converte o objeto retornado pelo serviço para um DTO antes de enviá-lo na resposta.
+                        this.userService.findById(id),
+                        // Chama o serviço para buscar o usuário pelo ID.
+                        UserGetResponseDto.class));
+        // Converte a entidade User para UserGetResponseDto antes de retornar.
+    }
+
 }

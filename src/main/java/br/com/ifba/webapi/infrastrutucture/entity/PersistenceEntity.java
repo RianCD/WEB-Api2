@@ -18,4 +18,3 @@ public class PersistenceEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 }
-

@@ -18,4 +18,7 @@ public interface UserIService {
 
     // Método para atualizar um objeto User existente no sistema
     public User update(User user);
+
+    // Método para buscar através do Id no sistema
+    public User findById(Long id);
 }

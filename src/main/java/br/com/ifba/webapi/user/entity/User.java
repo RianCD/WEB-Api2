@@ -34,4 +34,8 @@ public class User extends PersistenceEntity implements Serializable {
     @Column
     private String email;
 
+    // Define que este campo será uma coluna na tabela
+    @Column
+    private String password;
+
 }

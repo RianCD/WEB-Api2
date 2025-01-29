@@ -1,12 +1,12 @@
 package br.com.ifba.webapi.user.service;
 
+import br.com.ifba.webapi.infrastrutucture.exception.BusinessException;
 import br.com.ifba.webapi.user.entity.User;
 import br.com.ifba.webapi.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 // Indica que esta classe é um serviço na camada de negócio e será gerenciada pelo Spring
 @Service
@@ -43,5 +43,10 @@ public class UserService implements UserIService {
         // Chama o repositório para salvar as alterações feitas no usuário
         return userRepository.save(user);
     }
-}
 
+    @Override // Sobrescreve o método da interface ou classe pai
+    public User findById(Long id) { // Método para buscar um usuário pelo ID
+        return userRepository.findById(id) // Busca o usuário no repositório pelo ID
+                .orElseThrow(() -> new BusinessException("Not found User")); // Lança uma exceção caso o usuário não seja encontrado
+    }
+}
