@@ -40,4 +40,3 @@ public class ObjectMapperUtil { // Classe utilitária para conversão de objetos
                 .collect(Collectors.toList()); // Coleta os elementos convertidos em uma nova lista.
     }
 }
-

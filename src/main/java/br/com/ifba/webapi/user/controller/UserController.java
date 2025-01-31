@@ -6,6 +6,7 @@ import br.com.ifba.webapi.user.dto.UserGetResponseDto;
 import br.com.ifba.webapi.user.dto.UserPostRequestDto;
 import br.com.ifba.webapi.user.entity.User;
 import br.com.ifba.webapi.user.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,7 +28,9 @@ public class UserController {
     // Define o endpoint POST em "/users/save" para salvar um usuário
     // Especifica que a requisição deve consumir JSON
     @PostMapping(path = "/save", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> save(@RequestBody UserPostRequestDto userPostRequestDto) {
+    public ResponseEntity<?> save(@RequestBody @Valid UserPostRequestDto userPostRequestDto) {
+        // @RequestBody: Indica que o corpo (body) da requisição HTTP será mapeado para o objeto userPostRequestDto.
+        // @Valid: Ativa a validação do objeto userPostRequestDto com base nas anotações de validação presentes na classe UserPostRequestDto.
         // Retorna a resposta com o status HTTP 201 (Created) e o objeto salvo
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(objectMapperUtil.map(userService.save(
@@ -57,7 +60,7 @@ public class UserController {
 
     // Mapeia a rota PUT para atualizar um recurso com base no ID fornecido
     @PutMapping(path = "/update/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody User user) {
+    public ResponseEntity<?> update(@PathVariable("id") Long id, @RequestBody @Valid User user) {
         // Define o ID do objeto user como o ID recebido na URL
         user.setId(id);
         // Chama o serviço para atualizar o recurso com os dados fornecidos

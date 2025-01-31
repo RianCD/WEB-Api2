@@ -5,6 +5,7 @@ import br.com.ifba.webapi.user.entity.User;
 import br.com.ifba.webapi.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class UserService implements UserIService {
 
     // Método para salvar um usuário no banco de dados
     @Override
+    @Transactional// Anotação que define que este método deve ser executado dentro de uma transação
     public User save(User user) {
         // Chama o método save do UserRepository e retorna o usuário salvo
         return userRepository.save(user);
@@ -25,6 +27,7 @@ public class UserService implements UserIService {
 
     // Método para buscar todos os usuários do banco de dados
     @Override
+    @Transactional
     public List<User> findAll() {
         // Chama o método findAll do UserRepository e retorna a lista de usuários
         return userRepository.findAll();
@@ -32,6 +35,7 @@ public class UserService implements UserIService {
 
     // Implementação do método para excluir um usuário com base no ID
     @Override
+    @Transactional
     public void delete(Long id) {
         // Chama o repositório para excluir o usuário pelo ID
         userRepository.deleteById(id);
@@ -39,12 +43,14 @@ public class UserService implements UserIService {
 
     // Implementação do método para atualizar um usuário
     @Override
+    @Transactional
     public User update(User user) {
         // Chama o repositório para salvar as alterações feitas no usuário
         return userRepository.save(user);
     }
 
     @Override // Sobrescreve o método da interface ou classe pai
+    @Transactional
     public User findById(Long id) { // Método para buscar um usuário pelo ID
         return userRepository.findById(id) // Busca o usuário no repositório pelo ID
                 .orElseThrow(() -> new BusinessException("Not found User")); // Lança uma exceção caso o usuário não seja encontrado
