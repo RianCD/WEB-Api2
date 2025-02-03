@@ -1,6 +1,8 @@
 package br.com.ifba.webapi.user.service;
 
 import br.com.ifba.webapi.user.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -11,7 +13,7 @@ public interface UserIService {
     public User save(User user);
 
     // Método para buscar todos os objetos User no sistema
-    public List<User> findAll();
+    Page<User> findAll(Pageable pageable);
 
     // Método para excluir um objeto User com base no ID fornecido
     public void delete(Long id);

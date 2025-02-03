@@ -4,6 +4,8 @@ import br.com.ifba.webapi.infrastrutucture.exception.BusinessException;
 import br.com.ifba.webapi.user.entity.User;
 import br.com.ifba.webapi.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,13 +27,12 @@ public class UserService implements UserIService {
         return userRepository.save(user);
     }
 
-    // Método para buscar todos os usuários do banco de dados
     @Override
-    @Transactional
-    public List<User> findAll() {
-        // Chama o método findAll do UserRepository e retorna a lista de usuários
-        return userRepository.findAll();
+    @Transactional // Garante que a operação será executada dentro de uma transação.
+    public Page<User> findAll(Pageable pageable) {
+        return userRepository.findAll(pageable); // Retorna uma página de usuários conforme a paginação fornecida.
     }
+
 
     // Implementação do método para excluir um usuário com base no ID
     @Override

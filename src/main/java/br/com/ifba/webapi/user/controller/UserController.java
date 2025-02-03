@@ -8,17 +8,16 @@ import br.com.ifba.webapi.user.entity.User;
 import br.com.ifba.webapi.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-// Indica que esta classe é um controlador REST
-@RestController
-// Define o caminho base para os endpoints deste controlador como "/users"
-@RequestMapping(path = "/users")
-// Gera um construtor com argumentos obrigatórios para campos finais (final)
-@RequiredArgsConstructor
+
+@RestController // Indica que esta classe é um controlador REST
+@RequestMapping(path = "/users") // Define o caminho base para os endpoints deste controlador como "/users"
+@RequiredArgsConstructor // Gera um construtor com argumentos obrigatórios para campos finais (final)
 public class UserController {
     // Injeta a dependência de UserService automaticamente pelo construtor
     private final UserService userService;
@@ -41,12 +40,14 @@ public class UserController {
     // Define o endpoint GET em "/users/findall" para buscar todos os usuários
     // Especifica que a resposta será no formato JSON
     @GetMapping(path = "/findall", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> findAll() {
+    public ResponseEntity<?> findAll(Pageable pageable) {
         // Retorna a resposta com o status HTTP 200 (OK) e a lista de usuários
         return ResponseEntity.status(HttpStatus.OK)
-                .body(objectMapperUtil.mapAll(
-                        this.userService.findAll(),
-                        UserGetResponseDto.class));
+                .body(this.userService.findAll(pageable)
+                        .map(c -> objectMapperUtil.map(c, UserGetResponseDto.class)));
+        //No service é retornado um Page<Usuario>, porém no controller é retornado um Page<UserGetResponseDto>
+        //desta forma, é necessário converter os objetos usuario do Page para UserGetResponseDto
+        //para isso foi utilizado o método map
     }
 
     // Mapeia a rota DELETE para excluir um recurso com base no ID fornecido
