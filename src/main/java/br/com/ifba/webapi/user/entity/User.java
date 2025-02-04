@@ -2,10 +2,7 @@ package br.com.ifba.webapi.user.entity;
 
 import br.com.ifba.webapi.infrastrutucture.entity.PersistenceEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 
@@ -20,6 +17,7 @@ import java.io.Serializable;
 // Define o nome da tabela no banco de dados como "users"
 @Table(name = "users")
 @EqualsAndHashCode(callSuper = false)
+@Builder//utilizado para construir o builder
 public class User extends PersistenceEntity implements Serializable {
 
     // Define que este campo será uma coluna na tabela
